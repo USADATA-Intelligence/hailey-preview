@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Hailey - AI Audience Builder | USADATA</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:#F4F7FA;height:100vh;display:flex;justify-content:center;}
+.app{max-width:480px;width:100%;height:100vh;display:flex;flex-direction:column;background:#F4F7FA;position:relative;box-shadow:0 0 60px rgba(0,0,0,.06);}
+.hdr{background:linear-gradient(135deg,#070F1A 0%,#0A1628 50%,#0F2847 100%);border-bottom:1px solid rgba(45,216,123,.15);}
+.hdr-top{padding:8px 18px 0;display:flex;align-items:center;justify-content:space-between;}
+.hdr-logo{color:#FFF;font-size:14px;font-weight:700;letter-spacing:2px;opacity:.9;}
+.hdr-phone{font-size:10px;color:#8495A8;text-decoration:none;font-weight:500;}
+.hdr-row{padding:8px 18px 12px;display:flex;align-items:center;gap:10px;}
+.av{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#A8E063,#2DD87B 40%,#0FCCB0 70%,#0A8F7A);flex-shrink:0;box-shadow:0 0 12px rgba(45,216,123,0.4);position:relative;overflow:hidden;}
+.av::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 60% 70%,transparent 30%,rgba(0,0,0,0.15));}
+.av-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-15deg);width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.5);background:radial-gradient(circle at 40% 40%,rgba(255,255,255,0.25),transparent 70%);}
+.hdr-name{color:#FFF;font-size:16px;font-weight:700;}
+.hdr-ai{font-size:9px;font-weight:700;color:#0FCCB0;background:rgba(15,204,176,.12);padding:2px 6px;border-radius:6px;letter-spacing:.5px;}
+.hdr-sub{color:#8495A8;font-size:10px;font-weight:500;margin-top:1px;}
+.dot-live{width:6px;height:6px;border-radius:50%;background:#2DD87B;box-shadow:0 0 6px #2DD87B;}
+.msgs{flex:1;overflow-y:auto;padding:18px 14px 120px;-webkit-overflow-scrolling:touch;}
+.msg{display:flex;gap:10px;margin-bottom:14px;}
+.msg-u{justify-content:flex-end;}
+.msg-av{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#A8E063,#2DD87B 40%,#0FCCB0 70%,#0A8F7A);flex-shrink:0;position:relative;overflow:hidden;}
+.msg-av::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(ellipse at 60% 70%,transparent 30%,rgba(0,0,0,0.15));}
+.bub{max-width:82%;padding:12px 16px;font-size:14px;line-height:1.6;word-break:break-word;}
+.bub-h{border-radius:18px 18px 18px 4px;background:#FFF;color:#1A202C;box-shadow:0 1px 6px rgba(0,0,0,.05);border:1px solid #E8EDF2;}
+.bub-u{border-radius:18px 18px 4px 18px;background:#1565C0;color:#FFF;box-shadow:0 2px 10px rgba(21,101,192,.18);max-width:72%;}
+.typing{display:flex;gap:5px;padding:8px 0;align-items:center;}
+.typing span{width:7px;height:7px;border-radius:50%;background:linear-gradient(135deg,#0FCCB0,#2DD87B);animation:bp 1.4s ease-in-out infinite;}
+.typing span:nth-child(2){animation-delay:.18s;}
+.typing span:nth-child(3){animation-delay:.36s;}
+@keyframes bp{0%,60%,100%{transform:translateY(0) scale(.85);opacity:.35}30%{transform:translateY(-5px) scale(1);opacity:1}}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px;padding-left:44px;}
+.chip{padding:8px 16px;border-radius:22px;border:1.5px solid #C5CED8;background:#FFF;color:#1A202C;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.chip:hover{background:#E8EDF2;transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.12);}
+.chip-g{background:#2DD87B;color:#FFF;border-color:#2DD87B;}
+.chip-g:hover{background:#00B248;}
+.chip-a{background:#1565C0;color:#FFF;border-color:#1565C0;}
+.chip-a:hover{background:#0D47A1;}
+.chip-on{background:#1565C0;color:#FFF;border-color:#1565C0;}
+.svc{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:12px;cursor:pointer;background:#FFF;border:1.5px solid #C5CED8;transition:all .15s;width:100%;text-align:left;font-family:'DM Sans',sans-serif;margin-bottom:8px;}
+.svc:hover{background:#F4F7FA;}
+.svc-sel{background:#E8F5E9;border-color:#2DD87B;}
+.svc-name{font-size:13px;font-weight:600;color:#1A202C;}
+.svc-desc{font-size:11px;color:#8495A8;margin-top:1px;}
+.count-card{border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,.1);border:1px solid #E8EDF2;}
+.count-top{background:linear-gradient(135deg,#070F1A 0%,#0A1628 50%,#0F2847 100%);padding:22px 20px;position:relative;overflow:hidden;}
+.count-glow{position:absolute;top:-20px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(45,216,123,.15),transparent 70%);}
+.count-label{font-size:10px;font-weight:700;color:#0FCCB0;text-transform:uppercase;letter-spacing:1.5px;}
+.count-num{color:#FFF;font-size:38px;font-weight:700;margin-top:6px;transition:all .3s;}
+.count-sub{color:#8495A8;font-size:14px;font-weight:400;}
+.count-meta{display:flex;gap:16px;margin-top:12px;}
+.count-ml{font-size:10px;color:#8495A8;text-transform:uppercase;letter-spacing:.8px;}
+.count-mv{font-size:13px;color:#FFF;font-weight:600;margin-top:2px;}
+.count-bot{padding:16px 20px;background:#FFF;}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.tags-label{font-size:10px;font-weight:700;color:#8495A8;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.tag{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:500;background:#F4F7FA;color:#4A5568;border:1px solid #E8EDF2;}
+.intel{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#F0FFF4,#E8F5E9);border-radius:10px;border:1px solid #C8E6C9;margin-top:10px;}
+.intel-dot{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,#0FCCB0,#2DD87B,#A8E063);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#FFF;font-size:12px;font-weight:700;}
+.intel-txt{font-size:12px;color:#2E7D32;font-weight:500;line-height:1.4;}
+.intel-sub{font-size:11px;color:#558B2F;}
+.refine-section{padding-left:44px;margin-top:8px;}
+.refine-count{display:flex;align-items:baseline;gap:8px;padding:12px 16px;background:linear-gradient(135deg,#070F1A,#0F2847);border-radius:12px;margin-bottom:12px;}
+.refine-num{font-size:32px;font-weight:700;color:#2DD87B;transition:all .3s;}
+.refine-num.updating{opacity:.4;}
+.refine-sub{font-size:12px;color:#8495A8;}
+.refine-label{font-size:11px;font-weight:700;color:#8495A8;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.inp-bar{position:absolute;bottom:0;left:0;right:0;background:#FFF;border-top:1px solid #E8EDF2;}
+.inp-row{padding:10px 14px;display:flex;gap:8px;align-items:center;}
+.inp-row input{flex:1;padding:11px 16px;border-radius:24px;border:1.5px solid #C5CED8;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s;}
+.inp-row input:focus{border-color:#0FCCB0;}
+.inp-btn{width:42px;height:42px;border-radius:50%;border:none;background:linear-gradient(135deg,#0FCCB0,#2DD87B,#A8E063);color:#FFF;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(45,216,123,.3);flex-shrink:0;}
+.tagline{padding:0 14px 8px;display:flex;justify-content:center;}
+.tagline span{font-size:9px;font-weight:600;letter-spacing:3px;color:#C5CED8;text-transform:lowercase;}
+.foot{position:absolute;bottom:0;left:0;right:0;padding:10px 16px;background:#FFF;border-top:1px solid #E8EDF2;display:flex;justify-content:center;}
+.foot span{font-size:9px;font-weight:600;letter-spacing:3px;color:#C5CED8;text-transform:lowercase;}
+.log-panel{background:#0A1628;padding:16px;border-bottom:1px solid rgba(79,195,247,0.15);max-height:280px;overflow-y:auto;}
+.log-title{font-size:10px;font-weight:700;color:#4FC3F7;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;}
+.log-item{margin-bottom:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;border:1px solid rgba(255,255,255,0.06);font-size:11px;}
+.log-tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;}
+.log-tag{padding:1px 6px;border-radius:6px;font-size:9px;}
+.log-btn{background:rgba(79,195,247,0.08);border:1px solid rgba(79,195,247,0.2);border-radius:6px;padding:3px 8px;cursor:pointer;font-size:9px;font-weight:700;color:#4FC3F7;letter-spacing:.5px;font-family:'DM Sans',sans-serif;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+var API = "https://hailey-backend-production.up.railway.app";
+
+// Baseline selections per industry (broad, for top-line count)
+var IND = {
+  "Home Services":{
+    qp:"Homeowners in your service area",
+    pitch:"Let me start by showing you all the homeowners in your target area. Then we can narrow it down based on home value, age of home, income, and more.",
+    baseline:[{id:"alvionacxiom30_HomeOwnerRenter",d:"Homeowner",v:[{id:"1"}]}],
+    baseFilters:["Homeowners"],
+    refinements:[
+      {label:"Single Family Homes",id:"alvionacxiom30_PropertyTypeDetail",v:[{id:"A"}],active:false},
+      {label:"HH Income $75K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"3+ Years at Residence",id:"alvionacxiom30_LengthOfResidence",v:[{id:"03"},{id:"04"},{id:"05"},{id:"06"},{id:"07"},{id:"08"},{id:"09"},{id:"10"},{id:"11"},{id:"12"},{id:"13"},{id:"14"},{id:"15"}],active:false},
+      {label:"Home Value $200K+",id:"alvionacxiom30_HomeMktValue",v:[{id:"I"},{id:"J"},{id:"K"},{id:"L"},{id:"M"},{id:"N"},{id:"O"},{id:"P"},{id:"Q"},{id:"R"},{id:"S"}],active:false},
+      {label:"Home Improvement Interest",id:"alvionacxiom30_Interest_Interest",v:[{id:"65"}],active:false},
+      {label:"DIY Interest",id:"alvionacxiom30_Interest_Interest",v:[{id:"66"}],active:false}
+    ],
+    p:["Home Improvement","Home & Property","Smart Home"],px:["DIY Fixer Uppers","Smart Home Enthusiasts"]
+  },
+  "Insurance":{
+    qp:"Adults 45+ who are homeowners",
+    pitch:"Here is your total addressable market. You can narrow by age range, income, marital status, and other factors that signal insurance readiness.",
+    baseline:[{id:"alvionacxiom30_HomeOwnerRenter",d:"Homeowner",v:[{id:"1"}]},{id:"alvionacxiom30_AgeOfIndividual",d:"Age 45+",v:[{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"},{id:"56"},{id:"58"},{id:"60"},{id:"62"},{id:"64"},{id:"66"},{id:"68"},{id:"70"},{id:"72"},{id:"74"},{id:"76"},{id:"78"},{id:"80"},{id:"82"},{id:"84"},{id:"86"},{id:"88"},{id:"90"},{id:"92"},{id:"94"},{id:"96"},{id:"98"},{id:"99"}]}],
+    baseFilters:["Homeowners","Age 45+"],
+    refinements:[
+      {label:"Age 55-75 (Peak Insurance)",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"54"},{id:"56"},{id:"58"},{id:"60"},{id:"62"},{id:"64"},{id:"66"},{id:"68"},{id:"70"},{id:"72"},{id:"74"}],active:false,replaces:"alvionacxiom30_AgeOfIndividual"},
+      {label:"HH Income $50K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"A"},{id:"B"},{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Married",id:"alvionacxiom30_MaritalStatus",v:[{id:"1"},{id:"3"}],active:false},
+      {label:"Net Worth $100K+",id:"alvionacxiom30_InfobaseNetworth",v:[{id:"7"},{id:"8"},{id:"9"}],active:false},
+      {label:"Age 64-65 (Medicare)",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"64"}],active:false,replaces:"alvionacxiom30_AgeOfIndividual"}
+    ],
+    p:["Auto Insurance Affinity","Life Insurance","Property Insurance"],px:["Enriched Maturity","Financially Fit"]
+  },
+  "Dental / Healthcare":{
+    qp:"Households with children",
+    pitch:"Here is your starting universe. We can refine by income, age, new movers, and family size to find your ideal patients.",
+    baseline:[{id:"alvionacxiom30_PresOfChildren",d:"Children Present",v:[{id:"Y"}]}],
+    baseFilters:["Families with Children"],
+    refinements:[
+      {label:"HH Income $60K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Age 25-55",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"24"},{id:"26"},{id:"28"},{id:"30"},{id:"32"},{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"}],active:false},
+      {label:"New to Area (< 1 Year)",id:"alvionacxiom30_LengthOfResidence",v:[{id:"00"}],active:false},
+      {label:"Homeowners",id:"alvionacxiom30_HomeOwnerRenter",v:[{id:"1"}],active:false},
+      {label:"HH Income $100K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false,replaces:"alvionacxiom30_EstimatedIncomeHigherRanges"}
+    ],
+    p:["Health Interest","Wearables","Vitamins"],px:["Family Furtherance","Homes & Horizons"]
+  },
+  "Financial Services":{
+    qp:"Homeowners with income $75K+",
+    pitch:"Here is your broad prospect pool. Layer on net worth, age, and other financial indicators to zero in on your ideal client.",
+    baseline:[{id:"alvionacxiom30_HomeOwnerRenter",d:"Homeowner",v:[{id:"1"}]},{id:"alvionacxiom30_EstimatedIncomeHigherRanges",d:"Income $75K+",v:[{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}]}],
+    baseFilters:["Homeowners","Income $75K+"],
+    refinements:[
+      {label:"Income $100K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false,replaces:"alvionacxiom30_EstimatedIncomeHigherRanges"},
+      {label:"Net Worth $250K+",id:"alvionacxiom30_InfobaseNetworth",v:[{id:"8"},{id:"9"}],active:false},
+      {label:"Age 35-65",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"},{id:"56"},{id:"58"},{id:"60"},{id:"62"},{id:"64"}],active:false},
+      {label:"Investing Interest",id:"alvionacxiom30_Interest_Interest",v:[{id:"72"}],active:false},
+      {label:"Credit Card Active",id:"alvionacxiom30_CreditCardUser",v:[{id:"Y"}],active:false}
+    ],
+    p:["Bank Affinity","Loans & Mortgages","Investment Firm"],px:["Financially Fit","Professional Prosproprietors"]
+  },
+  "Automotive":{
+    qp:"All adults with income $40K+",
+    pitch:"Here is your full prospect base. Narrow by age, income, and vehicle-related indicators.",
+    baseline:[{id:"alvionacxiom30_EstimatedIncomeHigherRanges",d:"Income $40K+",v:[{id:"8"},{id:"9"},{id:"A"},{id:"B"},{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}]}],
+    baseFilters:["Income $40K+"],
+    refinements:[
+      {label:"Age 25-54",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"24"},{id:"26"},{id:"28"},{id:"30"},{id:"32"},{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"}],active:false},
+      {label:"HH Income $75K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false,replaces:"alvionacxiom30_EstimatedIncomeHigherRanges"},
+      {label:"Homeowners",id:"alvionacxiom30_HomeOwnerRenter",v:[{id:"1"}],active:false},
+      {label:"Married",id:"alvionacxiom30_MaritalStatus",v:[{id:"1"},{id:"3"}],active:false}
+    ],
+    p:["Vehicle Brand Affinity","In-Market Propensities"],px:["Suitably Mobile","Devotedly Mobile"]
+  },
+  "Non-Profit":{
+    qp:"Households with charitable interests",
+    pitch:"Here are households that show giving behavior. We can refine by income, net worth, and specific interest areas.",
+    baseline:[{id:"alvionacxiom30_Interest_Interest",d:"Community/Charities",v:[{id:"26"}]}],
+    baseFilters:["Charitable Interest"],
+    refinements:[
+      {label:"Mail Order Donors",id:"alvionacxiom30_MailOrderDonorInd",v:[{id:"D"}],active:false},
+      {label:"HH Income $75K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Net Worth $250K+",id:"alvionacxiom30_InfobaseNetworth",v:[{id:"8"},{id:"9"}],active:false},
+      {label:"Homeowners",id:"alvionacxiom30_HomeOwnerRenter",v:[{id:"1"}],active:false},
+      {label:"Age 45+",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"},{id:"56"},{id:"58"},{id:"60"},{id:"62"},{id:"64"},{id:"66"},{id:"68"},{id:"70"},{id:"72"},{id:"74"},{id:"76"},{id:"78"},{id:"80"}],active:false}
+    ],
+    p:["Charitable Contributions","Club Memberships"],px:["Altruistic Affluence","Generous Holdings"]
+  },
+  "Retail / E-Commerce":{
+    qp:"Active buyers with credit cards",
+    pitch:"Here is your buyer universe. Narrow by age, income, and spending behavior to match your brand.",
+    baseline:[{id:"alvionacxiom30_CreditCardUser",d:"Credit Card Active",v:[{id:"Y"}]}],
+    baseFilters:["Credit Card Active"],
+    refinements:[
+      {label:"Mail Order Buyers",id:"alvionacxiom30_MailOrderBuyerInd",v:[{id:"B"}],active:false},
+      {label:"Age 25-54",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"24"},{id:"26"},{id:"28"},{id:"30"},{id:"32"},{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"}],active:false},
+      {label:"HH Income $60K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Female",id:"alvionacxiom30_Gender",v:[{id:"F"}],active:false},
+      {label:"Fashion Interest",id:"alvionacxiom30_Interest_Interest",v:[{id:"47"}],active:false}
+    ],
+    p:["Store Affinity","Brand Preference","Shopping Channel"],px:["Fashionistas","Bargain Shoppers"]
+  },
+  "Higher Education":{
+    qp:"Young adults 18-24",
+    pitch:"Here is your prospective student pool. Refine by household income, education level, and family indicators.",
+    baseline:[{id:"alvionacxiom30_AgeOfIndividual",d:"Age 18-24",v:[{id:"18"},{id:"20"},{id:"22"},{id:"24"}]}],
+    baseFilters:["Age 18-24"],
+    refinements:[
+      {label:"HH Income $60K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"HH Income $100K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false,replaces:"alvionacxiom30_EstimatedIncomeHigherRanges"},
+      {label:"Parents (Children 15-17)",id:"alvionacxiom30_PresChildwithAge",v:[{id:"04"},{id:"09"},{id:"14"}],active:false},
+      {label:"College Educated HH",id:"alvionacxiom30_HeadHHEdu",v:[{id:"2"},{id:"3"}],active:false}
+    ],
+    p:["Education","Language"],px:["Moms of HS Students"]
+  },
+  "Travel / Hospitality":{
+    qp:"Travel enthusiasts",
+    pitch:"Here are households with active travel interests. Layer on income, net worth, and travel type to find your best prospects.",
+    baseline:[{id:"alvionacxiom30_Interest_Interest",d:"Travel Interest",v:[{id:"128"}]}],
+    baseFilters:["Travel Interest"],
+    refinements:[
+      {label:"HH Income $100K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Net Worth $250K+",id:"alvionacxiom30_InfobaseNetworth",v:[{id:"8"},{id:"9"}],active:false},
+      {label:"Cruise Interest",id:"alvionacxiom30_Interest_Interest",v:[{id:"124"}],active:false},
+      {label:"International Travel",id:"alvionacxiom30_Interest_Interest",v:[{id:"127"}],active:false},
+      {label:"Age 35-65",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"},{id:"56"},{id:"58"},{id:"60"},{id:"62"},{id:"64"}],active:false}
+    ],
+    p:["Airline Affinity","Hotel Affinity","Cruise Propensity"],px:["Affluent Travelers","Active Travelers"]
+  },
+  "Other":{
+    qp:"All households in your area",
+    pitch:"Here is the full universe. We can narrow by demographics, income, interests, and more.",
+    baseline:[],
+    baseFilters:["All Households"],
+    refinements:[
+      {label:"Homeowners",id:"alvionacxiom30_HomeOwnerRenter",v:[{id:"1"}],active:false},
+      {label:"HH Income $50K+",id:"alvionacxiom30_EstimatedIncomeHigherRanges",v:[{id:"A"},{id:"B"},{id:"C"},{id:"D"},{id:"E"},{id:"F"},{id:"G"},{id:"H"},{id:"I"},{id:"J"}],active:false},
+      {label:"Age 25-54",id:"alvionacxiom30_AgeOfIndividual",v:[{id:"24"},{id:"26"},{id:"28"},{id:"30"},{id:"32"},{id:"34"},{id:"36"},{id:"38"},{id:"40"},{id:"42"},{id:"44"},{id:"46"},{id:"48"},{id:"50"},{id:"52"},{id:"54"}],active:false},
+      {label:"Married",id:"alvionacxiom30_MaritalStatus",v:[{id:"1"},{id:"3"}],active:false}
+    ],
+    p:["General"],px:[]
+  }
+};
+
+var SVCS = [
+  {id:"email",l:"Targeted Email Marketing",d:"Managed campaigns to prospect inboxes"},
+  {id:"display",l:"Display & Retargeting Ads",d:"Omnichannel digital across web, mobile, CTV"},
+  {id:"social",l:"Paid Social (FB/IG)",d:"Custom audience activation on Meta platforms"},
+  {id:"analytics",l:"Customer Analytics",d:"Portrait reports, look-alikes, insights"},
+  {id:"hygiene",l:"Data Hygiene & Enhancement",d:"NCOA, merge/purge, append services"},
+  {id:"directmail",l:"Direct Mail Lists",d:"Print-ready lists with guaranteed delivery"}
+];
+
+var GEOS = [
+  {l:"ZIP + Radius",pr:"Enter ZIP code and radius in miles (e.g., 07446 15):"},
+  {l:"ZIP Code",pr:"Enter ZIP code (e.g., 07446):"},
+  {l:"Multi-ZIP",pr:"Enter ZIP codes separated by commas (e.g., 07446, 07450, 07652):"},
+  {l:"State",pr:"Enter state abbreviation (e.g., NJ):"},
+  {l:"Nationwide",pr:null}
+];
+
+var S = {step:"welcome",msgs:[],ind:null,geo:null,geoObj:null,det:"",cnt:null,cntId:null,svs:[],typing:false,showInp:false,bLog:null,showLog:false,refining:false,updating:false,activeRefinements:[]};
+
+function fmt(n){return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(1)+"K":String(n);}
+
+function getCount(geography, selections){
+  var body = {tableName:"consumer"};
+  if(geography) body.geography = geography;
+  if(selections && selections.length > 0) body.selections = selections;
+  return fetch(API+"/api/count",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify(body)
+  }).then(function(r){return r.json();});
+}
+
+function buildSelections(){
+  var d = IND[S.ind];
+  var sels = d.baseline.map(function(b){return{id:b.id,description:b.d,values:b.v};});
+  var replaced = {};
+  // Check for replacements
+  d.refinements.forEach(function(r){
+    if(r.active && r.replaces) replaced[r.replaces] = true;
+  });
+  // Remove replaced baseline selections
+  if(Object.keys(replaced).length > 0){
+    sels = sels.filter(function(s){return !replaced[s.id];});
+  }
+  // Add active refinements
+  d.refinements.forEach(function(r){
+    if(r.active){
+      sels.push({id:r.id,description:r.label,values:r.v});
+    }
+  });
+  return sels;
+}
+
+function getActiveFilterLabels(){
+  var d = IND[S.ind];
+  var labels = d.baseFilters.slice();
+  var replacedBase = {};
+  d.refinements.forEach(function(r){
+    if(r.active && r.replaces){
+      // Find which base filter to replace by matching the API id
+      d.baseline.forEach(function(b,i){
+        if(b.id === r.replaces) replacedBase[i] = r.label;
+      });
+    }
+  });
+  // Apply replacements
+  Object.keys(replacedBase).forEach(function(i){
+    labels[parseInt(i)] = replacedBase[parseInt(i)];
+  });
+  // Add non-replacing refinements
+  d.refinements.forEach(function(r){
+    if(r.active && !r.replaces) labels.push(r.label);
+  });
+  return labels;
+}
+
+function render(){
+  var h = '';
+  h += '<div class="hdr"><div class="hdr-top"><span class="hdr-logo">USADATA</span><div style="display:flex;align-items:center;gap:8px">';
+  if(S.bLog) h += '<button class="log-btn" onclick="toggleLog()">'+(S.showLog?'HIDE LOG':'SPECIALIST VIEW')+'</button>';
+  h += '<a class="hdr-phone" href="tel:8003998611">(800) 399-8611</a></div></div>';
+  h += '<div class="hdr-row"><div class="av"><div class="av-inner"></div></div><div style="flex:1"><div style="display:flex;align-items:center;gap:6px"><span class="hdr-name">Hailey</span><span class="hdr-ai">AI</span></div><div class="hdr-sub">Audience Intelligence Assistant</div></div><div style="display:flex;align-items:center;gap:5px"><div class="dot-live"></div><span style="color:#8495A8;font-size:10px">Online</span></div></div></div>';
+
+  // Log panel
+  if(S.showLog && S.bLog){
+    var b = S.bLog;
+    h += '<div class="log-panel"><div class="log-title">Specialist Handoff (Internal Only)</div>';
+    h += '<div class="log-item"><div style="font-size:9px;color:#8495A8;text-transform:uppercase">Contact</div><div style="color:#FFF;margin-top:2px">'+(b.contact||'Pending')+'</div></div>';
+    h += '<div class="log-item"><div style="font-size:9px;color:#8495A8;text-transform:uppercase">Audience</div><div style="color:#FFF;margin-top:2px">'+b.industry+' | '+b.geo+(b.detail?': '+b.detail:'')+' | '+fmt(b.count)+' | CountID: '+(b.countId||'N/A')+'</div></div>';
+    h += '<div class="log-item"><div style="font-size:9px;color:#8495A8;text-transform:uppercase">Filters</div><div class="log-tags">';
+    b.filters.forEach(function(f){h+='<span class="log-tag" style="background:rgba(255,255,255,0.06);color:#C5CED8">'+f+'</span>';});
+    h += '</div></div>';
+    h += '<div class="log-item"><div style="font-size:9px;color:#FFA726;text-transform:uppercase;font-weight:700">Propensity (hidden)</div><div class="log-tags">';
+    b.propensity.forEach(function(p){h+='<span class="log-tag" style="background:rgba(255,167,38,0.1);color:#FFA726">'+p+'</span>';});
+    h += '</div></div>';
+    if(b.personicx.length>0){h += '<div class="log-item"><div style="font-size:9px;color:#CE93D8;text-transform:uppercase;font-weight:700">Personicx (hidden)</div><div class="log-tags">';b.personicx.forEach(function(p){h+='<span class="log-tag" style="background:rgba(206,147,216,0.1);color:#CE93D8">'+p+'</span>';});h+='</div></div>';}
+    if(b.services && b.services.length>0){h += '<div class="log-item"><div style="font-size:9px;color:#2DD87B;text-transform:uppercase;font-weight:700">Services</div><div class="log-tags">';b.services.forEach(function(s){h+='<span class="log-tag" style="background:rgba(45,216,123,0.1);color:#2DD87B">'+s+'</span>';});h+='</div></div>';}
+    h += '</div>';
+  }
+
+  h += '<div class="msgs" id="msgs">';
+  S.msgs.forEach(function(m){
+    if(m.u){
+      h += '<div class="msg msg-u"><div class="bub bub-u">'+m.c+'</div></div>';
+    } else {
+      h += '<div class="msg"><div class="msg-av"></div><div class="bub bub-h">'+m.c+'</div></div>';
+    }
+  });
+  if(S.typing){
+    h += '<div class="msg"><div class="msg-av"></div><div class="bub bub-h"><div class="typing"><span></span><span></span><span></span></div></div></div>';
+  }
+
+  // Refinement UI
+  if(!S.typing && S.step==='refine'){
+    var d = IND[S.ind];
+    var labels = getActiveFilterLabels();
+    h += '<div class="refine-section">';
+    h += '<div class="refine-count"><span class="refine-num'+(S.updating?' updating':'')+'">'+fmt(S.cnt)+'</span><span class="refine-sub">matched prospects'+(S.updating?' (updating...)':'')+'</span></div>';
+    h += '<div class="refine-label">Narrow your audience</div>';
+    h += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px">';
+    d.refinements.forEach(function(r,i){
+      h += '<button class="chip'+(r.active?' chip-on':'')+'" onclick="toggleRef('+i+')">'+r.label+'</button>';
+    });
+    h += '</div>';
+    h += '<div class="tags-label">Active filters</div><div class="tags" style="margin-bottom:12px">';
+    labels.forEach(function(f){h+='<span class="tag">'+f+'</span>';});
+    h += '</div>';
+    h += '<button class="chip chip-g" onclick="lockAudience()">Lock this audience and continue</button>';
+    h += '</div>';
+  }
+
+  // Other step chips
+  if(!S.typing && !S.refining){
+    if(S.step==='industry'){
+      h += '<div class="chips">';
+      Object.keys(IND).forEach(function(n){h+='<button class="chip" onclick="pickInd(\''+n+'\')">'+n+'</button>';});
+      h += '</div>';
+    }
+    if(S.step==='geo'){
+      h += '<div class="chips">';
+      GEOS.forEach(function(g,i){h+='<button class="chip" onclick="pickGeo('+i+')">'+g.l+'</button>';});
+      h += '</div>';
+    }
+    if(S.step==='services'){
+      h += '<div style="padding-left:44px;margin-top:8px">';
+      SVCS.forEach(function(s){
+        var sel = S.svs.indexOf(s.id)>-1;
+        h += '<button class="svc'+(sel?' svc-sel':'')+'" onclick="toggleSvc(\''+s.id+'\')">';
+        h += '<div style="flex:1"><div class="svc-name">'+s.l+'</div><div class="svc-desc">'+s.d+'</div></div>';
+        if(sel) h += '<span style="color:#2DD87B;font-size:16px;font-weight:700">&#10003;</span>';
+        h += '</button>';
+      });
+      h += '<button class="chip chip-g" onclick="submitSvcs()">'+(S.svs.length>0?'Continue with '+S.svs.length+' service'+(S.svs.length>1?'s':''):'Just the audience list')+'</button></div>';
+    }
+    if(S.step==='done'){
+      h += '<div class="chips"><button class="chip chip-g" onclick="restart()">Build another audience</button></div>';
+    }
+  }
+
+  h += '<div id="anchor"></div></div>';
+
+  if(S.showInp){
+    h += '<div class="inp-bar"><div class="inp-row"><input id="inp" placeholder="Type your answer..." onkeydown="if(event.key===\'Enter\')submitInp()"/>';
+    h += '<button class="inp-btn" onclick="submitInp()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></button>';
+    h += '</div><div class="tagline"><span>activate. accelerate. amplify.</span></div></div>';
+  } else {
+    h += '<div class="foot"><span>activate. accelerate. amplify.</span></div>';
+  }
+
+  document.getElementById('app').innerHTML = h;
+  var msgs = document.getElementById('msgs');
+  if(msgs) msgs.scrollTop = msgs.scrollHeight;
+}
+
+function say(txt, delay){
+  return new Promise(function(resolve){
+    S.typing = true; render();
+    setTimeout(function(){
+      S.typing = false;
+      S.msgs.push({c:txt,u:false});
+      render();
+      resolve();
+    }, delay || 800);
+  });
+}
+
+function addUser(txt){ S.msgs.push({c:txt,u:true}); render(); }
+
+// --- FLOW ---
+
+async function init(){
+  await say("Hey there! I am <strong>Hailey</strong>, your audience intelligence assistant from USADATA. I help businesses find their best prospects using our database of <strong>260M+ consumer records</strong> and <strong>advanced predictive targeting</strong>.", 1400);
+  await say("What type of business are you building an audience for?", 800);
+  S.step = 'industry'; render();
+}
+
+async function pickInd(name){
+  S.ind = name; addUser(name);
+  var d = IND[name];
+  await say("Nice. I work with a lot of "+name.toLowerCase()+" companies. "+d.pitch, 900);
+  await say("First, pick your target geography and I will show you the numbers.", 600);
+  S.step = 'geo'; render();
+}
+
+async function pickGeo(idx){
+  var g = GEOS[idx];
+  S.geo = g.l; addUser(g.l);
+  if(g.pr){
+    S.showInp = true;
+    await say(g.pr, 600);
+    S.step = 'geo_detail'; render();
+    setTimeout(function(){var el=document.getElementById('inp');if(el)el.focus();},100);
+  } else {
+    S.det = ''; S.geoObj = null;
+    await fetchBaseline();
+  }
+}
+
+async function submitInp(){
+  var el = document.getElementById('inp');
+  if(!el || !el.value.trim()) return;
+  var val = el.value.trim();
+  S.showInp = false; S.det = val; addUser(val);
+
+  if(S.step === 'geo_detail'){
+    if(S.geo === 'ZIP + Radius'){
+      var parts = val.split(/[\s,]+/);
+      var centerZip = parts[0];
+      var miles = parseInt(parts[1]) || 15;
+      S.det = centerZip + " + " + miles + " mi radius";
+      S.showInp = false; render();
+      await say("Finding all ZIP codes within " + miles + " miles of " + centerZip + "...", 800);
+      try {
+        var rRes = await fetch(API + "/api/radius/" + centerZip + "/" + miles);
+        var rData = await rRes.json();
+        if(rData.zips && rData.zips.length > 1){
+          S.geoObj = {id:"zip",description:"Zip Codes",values:rData.zips.map(function(z){return{id:z,description:"code"};})};
+          await say("Found <strong>" + rData.zips.length + " ZIP codes</strong> in your radius. Pulling counts...", 600);
+        } else {
+          S.geoObj = {id:"zip",description:"Zip Codes",values:[{id:centerZip,description:"code"}]};
+        }
+      } catch(e) {
+        S.geoObj = {id:"zip",description:"Zip Codes",values:[{id:centerZip,description:"code"}]};
+      }
+      await fetchBaseline();
+    } else if(S.geo === 'ZIP Code'){
+      S.geoObj = {id:"zip",description:"Zip Codes",values:[{id:val,description:"code"}]};
+      await fetchBaseline();
+    } else if(S.geo === 'Multi-ZIP'){
+      var zips = val.split(/[,\s]+/).filter(function(z){return z.length>=5;});
+      S.geoObj = {id:"zip",description:"Zip Codes",values:zips.map(function(z){return{id:z.trim(),description:"code"};})};
+      await fetchBaseline();
+    } else if(S.geo === 'State'){
+      S.geoObj = {id:"state",description:"State",values:[{id:val.toUpperCase(),description:val}]};
+      await fetchBaseline();
+    } else {
+      await fetchBaseline();
+    }
+  } else if(S.step === 'contact'){
+    await submitContact(val);
+  }
+}
+
+async function fetchBaseline(){
+  await say("Pulling your audience data...", 800);
+  try{
+    var d = IND[S.ind];
+    var sels = d.baseline.map(function(b){return{id:b.id,description:b.d,values:b.v};});
+    var result = await getCount(S.geoObj, sels);
+    if(result.success){
+      S.cnt = result.count; S.cntId = result.countId;
+      d.refinements.forEach(function(r){r.active=false;});
+      S.bLog = {industry:S.ind,geo:S.geo||'Nationwide',detail:S.det,count:result.count,countId:result.countId,filters:d.baseFilters.slice(),propensity:d.p,personicx:d.px,services:[],contact:null};
+      await say("Your starting audience: <strong>"+fmt(result.count)+" prospects</strong> matching <strong>"+d.qp+"</strong> in "+(S.det||'all US markets')+".", 700);
+      await say("Now you can narrow it down. Toggle any of these filters and the count updates live.", 600);
+      S.step = 'refine'; render();
+    } else {
+      await say("I was not able to get a count for that geography. Try a different area or call us at <strong>(800) 399-8611</strong>.", 800);
+      S.step = 'geo'; render();
+    }
+  } catch(e){
+    await say("I had trouble reaching our data engine. Call <strong>(800) 399-8611</strong> or try again.", 800);
+    S.step = 'geo'; render();
+  }
+}
+
+async function toggleRef(idx){
+  if(S.updating) return;
+  var d = IND[S.ind];
+  var ref = d.refinements[idx];
+
+  // Handle "replaces" logic - deactivate other refinements that share the same replaces target or same API id
+  if(!ref.active && ref.replaces){
+    d.refinements.forEach(function(r,i){
+      if(i !== idx && r.active && r.replaces === ref.replaces) r.active = false;
+      if(i !== idx && r.active && r.id === ref.id && r.replaces) r.active = false;
+    });
+  }
+  if(!ref.active && !ref.replaces){
+    // Deactivate other refinements that target the same API column with replaces
+    d.refinements.forEach(function(r,i){
+      if(i !== idx && r.active && r.replaces === ref.id) r.active = false;
+    });
+  }
+
+  ref.active = !ref.active;
+  S.updating = true; render();
+
+  try{
+    var sels = buildSelections();
+    var result = await getCount(S.geoObj, sels);
+    if(result.success){
+      S.cnt = result.count; S.cntId = result.countId;
+      if(S.bLog){
+        S.bLog.count = result.count;
+        S.bLog.countId = result.countId;
+        S.bLog.filters = getActiveFilterLabels();
+      }
+    }
+  } catch(e){
+    console.error("Refinement error:", e);
+  }
+  S.updating = false; render();
+}
+
+async function lockAudience(){
+  var labels = getActiveFilterLabels();
+  addUser("Locked audience: "+fmt(S.cnt)+" prospects");
+  await say("That is <strong>"+fmt(S.cnt)+" prospects</strong> locked and scored for maximum response.", 700);
+  await say("Would any of these USADATA services help you activate this audience?", 700);
+  S.step = 'services'; render();
+}
+
+function toggleSvc(id){
+  var idx = S.svs.indexOf(id);
+  if(idx>-1) S.svs.splice(idx,1); else S.svs.push(id);
+  render();
+}
+
+async function submitSvcs(){
+  if(S.svs.length>0){
+    var names = S.svs.map(function(id){return SVCS.find(function(s){return s.id===id;}).l;});
+    addUser("Interested in: "+names.join(", "));
+    if(S.bLog) S.bLog.services = names;
+    await say("Great choices. I will flag <strong>"+names.join("</strong>, <strong>")+"</strong> for your specialist.", 800);
+  } else {
+    addUser("Just the audience list");
+    await say("No problem, we can explore those later.", 500);
+  }
+  S.showInp = true;
+  await say('Just need your contact info and a Data Specialist will follow up within the hour:<div style="margin-top:10px;background:#F4F7FA;border-radius:10px;padding:12px 14px;font-size:13px;border:1px solid #E8EDF2"><strong>Name</strong>, <strong>Email</strong>, and <strong>Company</strong></div>', 700);
+  S.step = 'contact'; render();
+  setTimeout(function(){var el=document.getElementById('inp');if(el)el.focus();},100);
+}
+
+async function submitContact(info){
+  if(S.bLog) S.bLog.contact = info;
+  console.log("=== HAILEY HANDOFF ===", JSON.stringify(S.bLog, null, 2));
+  await say("Perfect. A USADATA Data Specialist will be in touch shortly to finalize your <strong>"+fmt(S.cnt)+"</strong> prospect audience"+(S.svs.length>0?" and discuss your campaign services":"")+".", 900);
+  await say("You can also reach us at <strong>(800) 399-8611</strong> or visit <strong>usadata.com</strong>. Thanks for using Hailey!", 700);
+  S.step = 'done'; render();
+}
+
+async function restart(){
+  S = {step:"welcome",msgs:[],ind:null,geo:null,geoObj:null,det:"",cnt:null,cntId:null,svs:[],typing:false,showInp:false,bLog:null,showLog:false,refining:false,updating:false,activeRefinements:[]};
+  render(); await init();
+}
+
+function toggleLog(){ S.showLog = !S.showLog; render(); }
+
+init();
+</script>
+</body>
+</html>
