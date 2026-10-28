@@ -1,0 +1,19 @@
+# Secrets and local config. Never commit credentials; they live in Railway variables.
+.env
+.env.*
+!.env.example
+env
+*.pem
+*.key
+credentials.json
+service-account*.json
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.log
